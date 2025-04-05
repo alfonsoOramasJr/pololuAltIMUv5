@@ -9,6 +9,7 @@ class LSM6DS33:
         self.CTRL2_G = 0x11  # Gyroscope control register
         self.OUTX_L_G = 0x22  # Gyroscope output registers
         self.OUTX_L_XL = 0x28  # Accelerometer output registers
+        self.GYROSCOPE_SENSITIVITY = 8.75 / 1000
         self.initialize()
 
     def initialize(self):
@@ -18,11 +19,11 @@ class LSM6DS33:
         self.i2c.write_byte_data(self.CTRL2_G, 0x60)
 
     def read_raw_gyroscope(self):
-        gx_l, gx_h, gy_l, gy_h, gz_l, gz_h = self.i2c.read_i2c_block_data(self.OUTX_L_G, 6)
-        gx = struct.unpack('<h', bytes([gx_l, gx_h]))[0]
-        gy = struct.unpack('<h', bytes([gy_l, gy_h]))[0]
-        gz = struct.unpack('<h', bytes([gz_l, gz_h]))[0]
-        return gx, gy, gz
+        gravity_x_axis_low, gravity_x_axis_high, gravity_y_axis_low, gravity_y_axis_high, gravity_z_axis_low, gravity_z_axis_high = self.i2c.read_i2c_block_data(self.OUTX_L_G, 6)
+        gravity_x_axis = struct.unpack('<h', bytes([gravity_x_axis_low, gravity_x_axis_high]))[0]
+        gravity_y_axis = struct.unpack('<h', bytes([gravity_y_axis_low, gravity_y_axis_high]))[0]
+        gravity_z_axis = struct.unpack('<h', bytes([gravity_z_axis_low, gravity_z_axis_high]))[0]
+        return gravity_x_axis, gravity_y_axis, gravity_z_axis
     
     def read_gyroscope(self):
         """
@@ -33,14 +34,13 @@ class LSM6DS33:
         The formula is as follows,
             Gyroscope = (raw gyroscope data) * (sensitivity value / 1000[milli])
         """
-        self.GYROSCOPE_SENSITIVITY = 8.75 / 1000
-        self.gx, self.gy, self.gz = self.read_raw_gyroscope()
+        
+        gravity_x_axis, gravity_y_axis, gravity_z_axis = self.read_raw_gyroscope()
+        gravity_x_axis *= self.GYROSCOPE_SENSITIVITY
+        gravity_y_axis *= self.GYROSCOPE_SENSITIVITY
+        gravity_z_axis *= self.GYROSCOPE_SENSITIVITY
 
-        self.gx *= self.GYROSCOPE_SENSITIVITY
-        self.gy *= self.GYROSCOPE_SENSITIVITY
-        self.gz *= self.GYROSCOPE_SENSITIVITY
-
-        return self.gx, self.gy, self.gz
+        return gravity_x_axis, gravity_y_axis, gravity_z_axis
 
     def read_raw_accelerometer(self):
         ax_l, ax_h, ay_l, ay_h, az_l, az_h = self.i2c.read_i2c_block_data(self.OUTX_L_XL, 6)
