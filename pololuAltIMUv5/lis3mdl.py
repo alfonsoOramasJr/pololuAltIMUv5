@@ -1,5 +1,4 @@
 ## MAGNETOMETER SENSOR
-
 from i2c_interface import I2CInterface
 
 class LIS3MDL:
