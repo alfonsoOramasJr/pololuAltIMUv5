@@ -12,7 +12,7 @@ class LSM6DS33:
 
         self.ACCELEROMETER_SENSITIVITY = 0.000061
         self.GYROSCOPE_SENSITIVITY = 8.75 / 1000
-        
+
         self.initialize()
 
     def initialize(self):
@@ -58,10 +58,3 @@ class LSM6DS33:
         accelerometer_y_axis *= self.ACCELEROMETER_SENSITIVITY
         accelerometer_z_axis *= self.ACCELEROMETER_SENSITIVITY
         return accelerometer_x_axis, accelerometer_y_axis, accelerometer_z_axis
-
-    def isolate_gravity(self, accelerometer_reading, CONSTANT_SMOOTHING, current_gravity):
-        self.current_gravity = CONSTANT_SMOOTHING * current_gravity + (1 - CONSTANT_SMOOTHING) * accelerometer_reading
-        return self.current_gravity
-
-    def get_linear_acceleration(accelerometer_reading, isolated_gravity):
-        return accelerometer_reading - isolated_gravity
