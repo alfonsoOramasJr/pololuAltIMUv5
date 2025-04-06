@@ -24,9 +24,9 @@ class LIS3MDL:
 
         self.i2c = I2CInterface(i2c_bus, i2c_address)
         if default_initialization == True:
-            self.initialize_sensor()
+            self.initialize()
     
-    def initialize_sensor(self):
+    def initialize(self):
         self.i2c.write_byte_data(self.CTRL_REG1, 0x70)  # 80 Hz, high performance
         self.i2c.write_byte_data(self.CTRL_REG2, 0x00)  # ±4 gauss
         self.i2c.write_byte_data(self.CTRL_REG3, 0x00)  # Continuous-conversion mode
