@@ -15,7 +15,7 @@ class Orientation:
         return np.array([array_data])
 
     def get_accelerometer_values_as_numpy_array(self):
-        return self.get_three_degrees_of_freedom_as_numpy_array(list(self.gyroscope_and_acceleromter_interface.read_raw_accelerometer()))
+        return self.get_three_degrees_of_freedom_as_numpy_array(list(self.gyroscope_and_acceleromter_interface.read_accelerometer()))
 
     def get_gyroscope_values_as_numpy_array(self):
         return self.get_three_degrees_of_freedom_as_numpy_array(list(self.gyroscope_and_acceleromter_interface.read_gyroscope()))
@@ -25,9 +25,9 @@ class Orientation:
 
     def get_roll_pitch_and_yaw(self):
         euler_angles = self.madgwick_filter.updateMARG(
-                                            self.gyroscope_and_acceleromter_interface.read_raw_accelerometer(),
-                                            self.gyroscope_and_acceleromter_interface.read_gyroscope(),
-                                            self.magnetometer_interface.read_magnetic_field())
+                                            self.get_accelerometer_values_as_numpy_array(),
+                                            self.get_gyroscope_values_as_numpy_array(),
+                                            self.get_magnetometer_values_as_numpy_array())
         roll, pitch, yaw = euler_angles[0]
         return roll, pitch, yaw
     
