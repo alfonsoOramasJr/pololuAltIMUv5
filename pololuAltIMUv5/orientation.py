@@ -1,12 +1,11 @@
 import numpy as np
 from ahrs.filters import Madgwick
 
-import lps25h, lsm6ds33, lis3mdl
+import lsm6ds33, lis3mdl
 
 class Orientation:
     def __init__(self):
         self.madgwick_filter = Madgwick()
-        self.pressure_interface = lps25h.LPS25H()
         self.magnetometer_interface = lis3mdl.LIS3MDL()
         self.gyroscope_and_acceleromter_interface = lsm6ds33.LSM6DS33()
         self.euler_angles = None
