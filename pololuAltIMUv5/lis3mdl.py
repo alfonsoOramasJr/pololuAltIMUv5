@@ -1,5 +1,5 @@
 ## MAGNETOMETER SENSOR
-from i2c_interface import I2CInterface
+from .i2c_interface import I2CInterface
 
 class LIS3MDL:
     """
@@ -7,7 +7,8 @@ class LIS3MDL:
     address becomes 0x1F.
     """
 
-    def __init__(self, i2c_bus=1, i2c_address=0x1E): 
+    def __init__(self, i2c_bus=1, i2c_address=0x1E):
+        self.i2c = I2CInterface(i2c_bus, i2c_address)
         self.WHO_AM_I = 0x0F
         self.CTRL_REG1 = 0x20
         self.CTRL_REG2 = 0x21
@@ -21,7 +22,7 @@ class LIS3MDL:
         self.OUT_Z_H = 0x2D
 
         self.MAGNETOMETER_SENSITIVITY = 0.14
-        
+
         self.initialize()
     
     def initialize(self):

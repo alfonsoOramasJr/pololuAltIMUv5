@@ -1,8 +1,4 @@
-try:
-    import smbus2
-except ImportError:
-    print('ERROR: missing smbus2 library, try "pip install smbus2" in the command line.')
-    quit()
+import smbus2
 
 class I2CInterface:
     def __init__(self, i2c_bus=1, i2c_address=0x6B):

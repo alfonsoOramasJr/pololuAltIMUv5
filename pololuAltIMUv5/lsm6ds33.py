@@ -1,5 +1,5 @@
 ## GYROSCOPE AND ACCELEROMETER SENSOR
-from i2c_interface import I2CInterface
+from .i2c_interface import I2CInterface
 import struct
 
 class LSM6DS33:

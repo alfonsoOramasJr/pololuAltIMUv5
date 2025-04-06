@@ -1,13 +1,14 @@
 import numpy as np
 from ahrs.filters import Madgwick
 
-import lsm6ds33, lis3mdl
+from .lis3mdl import LIS3MDL
+from .lsm6ds33 import LSM6DS33
 
 class Orientation:
     def __init__(self):
         self.madgwick_filter = Madgwick()
-        self.magnetometer_interface = lis3mdl.LIS3MDL()
-        self.gyroscope_and_acceleromter_interface = lsm6ds33.LSM6DS33()
+        self.magnetometer_interface = LIS3MDL()
+        self.gyroscope_and_acceleromter_interface = LSM6DS33()
         self.euler_angles = None
     
     def convert_to_numpy_array(self, array_data):
