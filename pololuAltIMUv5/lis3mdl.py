@@ -20,11 +20,9 @@ class LIS3MDL:
         self.OUT_Z_L = 0x2C
         self.OUT_Z_H = 0x2D
 
-        default_initialization = False
-
-        self.i2c = I2CInterface(i2c_bus, i2c_address)
-        if default_initialization == True:
-            self.initialize()
+        self.MAGNETOMETER_SENSITIVITY = 0.14
+        
+        self.initialize()
     
     def initialize(self):
         self.i2c.write_byte_data(self.CTRL_REG1, 0x70)  # 80 Hz, high performance
@@ -32,11 +30,19 @@ class LIS3MDL:
         self.i2c.write_byte_data(self.CTRL_REG3, 0x00)  # Continuous-conversion mode
         self.i2c.write_byte_data(self.CTRL_REG4, 0x0C)  # Z-axis ultra high performance
 
+    def read_raw_magnetic_field(self):
+        east_component = self.read_axis(self.OUT_X_L, self.OUT_X_H)
+        north_component = self.read_axis(self.OUT_Y_L, self.OUT_Y_H)
+        up_component = self.read_axis(self.OUT_Z_L, self.OUT_Z_H)
+        return east_component, north_component, up_component
+    
     def read_magnetic_field(self):
-        x = self.read_axis(self.OUT_X_L, self.OUT_X_H)
-        y = self.read_axis(self.OUT_Y_L, self.OUT_Y_H)
-        z = self.read_axis(self.OUT_Z_L, self.OUT_Z_H)
-        return x, y, z
+        east_magnetic_field, north_magnetic_field, up_magnetic_field = self.read_raw_magnetic_field()
+        east_magnetic_field *= self.MAGNETOMETER_SENSITIVITY
+        north_magnetic_field *= self.MAGNETOMETER_SENSITIVITY
+        up_magnetic_field *= self.MAGNETOMETER_SENSITIVITY
+
+        return east_magnetic_field, north_magnetic_field, up_magnetic_field
 
     def read_axis(self, low_addr, high_addr):
         low_byte = self.i2c.read_byte_data(low_addr)

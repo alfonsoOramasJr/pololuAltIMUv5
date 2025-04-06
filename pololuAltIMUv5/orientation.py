@@ -11,17 +11,17 @@ class Orientation:
         self.gyroscope_and_acceleromter_interface = lsm6ds33.LSM6DS33()
         self.euler_angles = None
     
-    def get_three_degrees_of_freedom_as_numpy_array(self, array_data):
+    def convert_to_numpy_array(self, array_data):
         return np.array([array_data])
 
     def get_accelerometer_values_as_numpy_array(self):
-        return self.get_three_degrees_of_freedom_as_numpy_array(list(self.gyroscope_and_acceleromter_interface.read_accelerometer()))
+        return self.convert_to_numpy_array(list(self.gyroscope_and_acceleromter_interface.read_accelerometer()))
 
     def get_gyroscope_values_as_numpy_array(self):
-        return self.get_three_degrees_of_freedom_as_numpy_array(list(self.gyroscope_and_acceleromter_interface.read_gyroscope()))
+        return self.convert_to_numpy_array(list(self.gyroscope_and_acceleromter_interface.read_gyroscope()))
 
     def get_magnetometer_values_as_numpy_array(self):
-        return self.get_three_degrees_of_freedom_as_numpy_array(list(self.magnetometer_interface.read_magnetic_field()))
+        return self.convert_to_numpy_array(list(self.magnetometer_interface.read_magnetic_field()))
 
     def get_roll_pitch_and_yaw(self):
         euler_angles = self.madgwick_filter.updateMARG(

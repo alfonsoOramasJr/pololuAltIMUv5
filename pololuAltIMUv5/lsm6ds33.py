@@ -9,8 +9,10 @@ class LSM6DS33:
         self.CTRL2_G = 0x11  # Gyroscope control register
         self.OUTX_L_G = 0x22  # Gyroscope output registers
         self.OUTX_L_XL = 0x28  # Accelerometer output registers
+
         self.ACCELEROMETER_SENSITIVITY = 0.000061
         self.GYROSCOPE_SENSITIVITY = 8.75 / 1000
+        
         self.initialize()
 
     def initialize(self):
