@@ -3,6 +3,6 @@
 from .orientation import Orientation
 
 ## Sensors
-import lsm6ds33
-import lis3mdl
-import lps25h
+from . import lsm6ds33
+from . import lis3mdl
+from . import lps25h
